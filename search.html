@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查找结果</title>
+    <link href="css/search.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/Swiper/4.5.0/js/swiper.js"></script>
+    <link href="https://cdn.bootcss.com/Swiper/4.5.0/css/swiper.css" rel="stylesheet">
+    <script>
+        let search_url = "http://localhost:8080/search/searchProject";
+        let findCollection1_url = "http://localhost:8080/findCollection1";
+        let addCollection1_url = "http://localhost:8080/addCollection1";
+        let updateCollection1_url = "http://localhost:8080/updateCollection1";
+        search_url += location.search;
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            // alert(sessionStorage.getItem("uid"));
+            let $content = $(".content");
+            $.get(search_url, function (results) {
+                for (const result of results.data) {
+                    let uid = sessionStorage.getItem("uid");
+                    let proid = result.proid;
+
+                    if (sessionStorage.getItem("uid") != null){
+                        $.get(findCollection1_url + "?uid=" + uid + "&proid=" + proid, function (resultss) {
+                            if (resultss.status === 200) {
+                                $content.append(
+                                    $("<div>").attr('class', 'cont row').append(
+                                        $("<div>").attr('class', 'category col-lg-2 col-lg-offset-3').append(
+                                            $("<a>").attr('href', '#').append(
+                                                $("<span>").text(result.category.cateName)
+                                            )
+                                        )
+                                    ).append(
+                                        $("<div>").attr('class', 'project col-lg-4').append(
+                                            $("<a>").attr('href', 'project_detail.html?proId=' + result.proid).append(
+                                                $("<span>").text(result.proName)
+                                            )
+                                        ).append(
+                                            $("<div>").attr('class', 'project666').append(
+                                                $("<span>").text("预算：" + result.subMenu2.menu2Name)
+                                            ).append(
+                                                $("<span>").text("发布日期：" + result.createTime)
+                                            )
+                                        )
+                                    ).append(
+                                        $("<div>").attr('class', 'cole col-lg-2').append(
+                                            $("<button>").attr('class', 'btn').attr('type', 'button').append(
+                                                $("<span>").text("取消收藏").click(function () {
+                                                    $.get(updateCollection1_url + "?uid=" + uid + "&proid=" + proid, function (resultsss) {
+                                                        if (resultsss.status === 200) {
+                                                            $(this).text("添加收藏")
+                                                        }
+                                                        history.go(0)
+                                                    }, 'json')
+                                                })
+                                            )
+                                        )
+                                    )
+                                );
+                            } else {
+                                $content.append(
+                                    $("<div>").attr('class', 'cont row').append(
+                                        $("<div>").attr('class', 'category col-lg-2 col-lg-offset-3').append(
+                                            $("<a>").attr('href', '#').append(
+                                                $("<span>").text(result.category.cateName)
+                                            )
+                                        )
+                                    ).append(
+                                        $("<div>").attr('class', 'project col-lg-4').append(
+                                            $("<a>").attr('href', 'project_detail.html?proId=' + result.proid).append(
+                                                $("<span>").text(result.proName)
+                                            )
+                                        ).append(
+                                            $("<div>").attr('class', 'project666').append(
+                                                $("<span>").text("预算：" + result.subMenu2.menu2Name)
+                                            ).append(
+                                                $("<span>").text("发布日期：" + result.createTime)
+                                            )
+                                        )
+                                    ).append(
+                                        $("<div>").attr('class', 'cole col-lg-2').append(
+                                            $("<button>").attr('class', 'btn').attr('type', 'button').append(
+                                                $("<span>").text("添加收藏").click(function () {
+                                                    $.get(addCollection1_url + "?uid=" + uid + "&proid=" + proid, function (resultssss) {
+                                                        if (resultssss.status === 200) {
+                                                            $(this).text("取消收藏")
+                                                        }
+                                                        history.go(0)
+                                                    }, 'json')
+                                                })
+                                            )
+                                        )
+                                    )
+                                );
+                            }
+                        }, 'json');
+                    }else {
+                        $content.append(
+                            $("<div>").attr('class', 'cont row').append(
+                                $("<div>").attr('class', 'category col-lg-2 col-lg-offset-3').append(
+                                    $("<a>").attr('href', '#').append(
+                                        $("<span>").text(result.category.cateName)
+                                    )
+                                )
+                            ).append(
+                                $("<div>").attr('class', 'project col-lg-4').append(
+                                    $("<a>").attr('href', 'project_detail.html?proId=' + result.proid).append(
+                                        $("<span>").text(result.proName)
+                                    )
+                                ).append(
+                                    $("<div>").attr('class', 'project666').append(
+                                        $("<span>").text("预算：" + result.subMenu2.menu2Name)
+                                    ).append(
+                                        $("<span>").text("发布日期：" + result.createTime)
+                                    )
+                                )
+                            ).append(
+                                $("<div>").attr('class', 'cole col-lg-2').append(
+                                    $("<button>").attr('class', 'btn').attr('type', 'button').append(
+                                        $("<span>").text("添加收藏").click(function () {
+                                            alert("请先登录");
+                                            location.href = "login.html"
+                                        })
+                                    )
+                                )
+                            )
+                        );
+                    }
+                }
+            }, 'json')
+        })
+
+        $(function () {
+            $("#search_btn").click(function () {
+                if ($("#exampleInputName2").val()!==null && $("#exampleInputName2").val()!=="" && $("#exampleInputName2").val()!==undefined){
+                    location.href = "search.html?keyword=" + $("#exampleInputName2").val();
+                } else {
+                    alert("搜索框不能为空！")
+                }
+                // alert(sessionStorage.getItem("uid"));
+                return false;
+            })
+        });
+    </script>
+
+</head>
+<body>
+<nav class="navbar navbar-default clearfix" role="navigation" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #b9ddc7"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+        <li><a href="collect.html">收藏</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li>
+            <div id="top" style="line-height: 50px;">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="exampleInputName2" style="font-size: 15px;font-weight: 200">搜接包人：</label>
+                        <input  type="text" class="form-control" id="exampleInputName2" placeholder="项目名/要求" style="width: 300px;">
+                    </div>
+                    <button id="search_btn" type="button" class="btn btn-default">开始搜索</button>
+                </form>
+            </div>
+        </li>
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+<div class="content container-fluid">
+    <div class="page-header text-center">
+        <h3>查询结果</h3>
+    </div>
+
+</div>
+
+</body>
+</html>

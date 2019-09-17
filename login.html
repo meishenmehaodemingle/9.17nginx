@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+    <script src="js/jquery.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+
+    <script>
+        const LOGIN_URL = 'http://localhost:8080/login';
+
+
+        $(function () {
+
+            $(".btn1").click(function () {
+                let username = $("#usm").val();
+                let password = $("#pwd").val();
+                let data = {
+                    username: username,
+                    password: password,
+                };
+
+
+                $.get(LOGIN_URL, data, function (result) {
+                    if (result.status === 200) {
+                        //保存登录的用户id和名字  取的时候用sessionStorage.getItem("uid")
+                        sessionStorage.setItem('uid',result.data.uid);
+                        sessionStorage.setItem('username',result.data.username);
+                        // alert(sessionStorage.getItem("uid"));
+                        window.location.href = 'index.html'
+                    } else {
+                        alert("账号或密码有误，请确认后重新登陆")
+                    }
+                },'json')
+            });
+
+            $(".btn2").click(function () {
+                location.href = 'register.html'
+            });
+
+            $(".btn3").click(function () {
+                location.href = 'password.html'
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="page-header text-center">
+        <h3>登录界面</h3>
+    </div>
+    <div class="col-lg-4 col-lg-offset-4 box">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-lg-3 control-label text-left center-block">用户名</label>
+                <div class=" col-lg-8">
+                    <input id="usm" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label text-left center-block">密码</label>
+                <div class="col-lg-8">
+                    <input id="pwd" type="password" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-3">
+                    <button type="button" class="btn btn1 btn-info">登录</button>
+                </div>
+                <div class="col-lg-offset-1 col-lg-2">
+                    <button type="button" class="btn btn2 btn-info">注册</button>
+                </div>
+                <div class="col-lg-offset-1 col-lg-2">
+                    <button type="button" class="btn btn3 btn-info">修改密码</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

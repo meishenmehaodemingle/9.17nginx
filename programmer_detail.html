@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="">
+
+    <title>Title</title>
+    <script src="js/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.js"></script>
+    <!--     轮播图-->
+    <script src="https://cdn.bootcss.com/Swiper/4.5.0/js/swiper.js"></script>
+    <!--      核心样式组件-->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.css" rel="stylesheet">-->
+    <!--    轮播图-->
+    <link href="https://cdn.bootcss.com/Swiper/4.5.0/css/swiper.css" rel="stylesheet">
+    <link href="css/reset.css" rel="stylesheet">
+    <link href="css/programmer_detail.css" rel="stylesheet">
+    <script>
+        let programmer_url = "http://localhost:8080/programmer";
+        programmer_url += location.search;
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            $.get(programmer_url,function (results) {
+                let $proImg = $(".contents_img");
+                let $proName = $(".pro_name");
+                let $location = $(".location")
+                let $proNum = $(".project_num")
+                let $fansHot = $(".fans_hot")
+                let $proGra = $(".confidence_grades")
+                let $recentGet = $(".recent_get")
+                let $goodAt = $(".good_at")
+                let $talentLabel = $(".talent_label")
+                let $vipIntro = $(".vip_intro")
+                let $profess = $(".profess")
+                let $attitude = $(".attitude")
+                let $quality = $(".quality")
+                let $speed = $(".speed")
+                if(results.status===200){
+                    $proImg.append(
+                        $("<a>").append(
+                            $("<img>").attr("src",results.data.pimage)
+                        )
+                    )
+                    $proName.append(
+                        $("<span>").text(results.data.pname)
+                    )
+                    $location.append(
+                        $("<span>").text(results.data.location)
+                    )
+                    $proNum.text(results.data.finish)
+                    $fansHot.text(results.data.moods)
+                    $proGra.text(results.data.grade)
+                    $recentGet.text(results.data.income)
+
+                    $goodAt.append(
+                        $("<span>").text(results.data.adept).attr("class","green")
+                    )
+                    $talentLabel.append(
+                        $("<span>").text(results.data.category.cateName).attr("class","green")
+                    )
+                    $vipIntro.append(
+                        $("<span>").text(results.data.introduce)
+                    )
+                    $profess.text(results.data.grades.grade1)
+                    $attitude.text(results.data.grades.grade3)
+                    $quality.text(results.data.grades.grade2)
+                    $speed.text(results.data.grades.grade4)
+                }
+            },'json')
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default clearfix" role="navigation" id="s1" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #dddddd"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+        <li><a href="collect.html">收藏</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+    <div class="container">
+        <div class="heads">
+            <div class="col-lg-12 pro_heads">
+                <a href="#" class="heads_img">
+                    <img src="img/nei_banner.png" style="width: 100%">
+                </a>
+            </div>
+        </div>
+        <div class="contents col-lg-12">
+            <div class="col-lg-2">
+                <i class="contents_img">
+                </i>
+            </div>
+            <div class="col-lg-10">
+                <div>
+
+                    <p class="pro_name">
+                        <span>昵称&nbsp;</span>
+                    </p>
+                </div>
+                <div>
+                    <p class="location">
+                        <span>
+                            地址&nbsp;
+                        </span>
+                    </p>
+                </div>
+                <div class="th">
+                    <table  class="table table-striped">
+                            <tr>
+                                <td>
+                                <b class="project_num"></b>
+                                </td>
+                                <td>
+                                    <em class="fans_hot">
+                                    </em>
+                                </td>
+                                <td>
+                                    <em class="confidence_grades"></em>
+                                </td>
+                                <td><em class="recent_get"></em></td>
+                            </tr>
+                            <tr class="td_text">
+                                <td>
+                                    承接项目数
+                                </td>
+                                <td>
+                                    人气
+                                </td>
+                                <td>
+                                    信誉积分
+                                </td>
+                                <td>
+                                    最近收入
+                                </td>
+                            </tr>
+                    </table>
+                </div>
+                <div >
+                    <p class="good_at">
+                    <span>
+                        擅长领域&nbsp;
+                    </span>
+                    </p>
+                </div>
+                <div>
+                    <p class="talent_label">
+                    <span>
+                        技能标签&nbsp;
+                    </span>
+                    </p>
+                </div>
+                <div>
+                    <p class="vip_intro">
+                    <span>
+                        会员简介
+                    </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="remark">
+            <div class="tabs_title" align="center">
+                综合评价
+            </div>
+            <table class="table table_remark">
+                <tr>
+                    <td>专业程度</td>
+                    <td class="profess"></td>
+                    <td>服务态度</td>
+                    <td class="attitude"></td>
+                </tr>
+                <tr>
+                    <td>完成质量</td>
+                    <td class="quality"></td>
+                    <td>反馈速度</td>
+                    <td class="speed"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

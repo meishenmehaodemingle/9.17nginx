@@ -1,0 +1,69 @@
+.project_name{
+    font-size: 24px;
+    color: #333333;
+    margin-top: 0px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+}
+.project_name span{
+    font-size: 35px;
+    font-weight: 900;
+}
+h1{
+    margin: .67em 0;
+}
+.pro_com{
+    font-size: 25px;
+    padding: 10px;
+}
+.single{
+    background-color: #F8F9FB;
+    text-align: center;
+    font-size: 20px;
+}
+.text{
+    background-color: #F8F9FB;
+    color: #666666;
+    word-break: break-word;
+    padding: 20px;
+}
+.desc{
+    padding-top: 50px;
+    font-size: 25px;
+    color: #333333;
+}
+p {
+    margin: 0 0 10px;
+}
+.cat_name,.pro_cost,.spend_time,.area{
+    color: #333333;
+    padding-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cat{
+    padding-top: 5px;
+    color: #666666;
+    padding-bottom: 30px;
+}
+a {
+    text-decoration: none !important;
+}
+.text_desc{
+    font-size: 20px;
+    line-height: 20px;
+}
+.pro_process {
+    padding: 20px;
+    font-size: 20px;
+}
+span{
+    margin-left: 10px;
+}
+body{
+    background-color: #c8f8ff;
+}

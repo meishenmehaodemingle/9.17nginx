@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/carts.css" rel="stylesheet">
+    <link href="css/reset.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/base_url.js"></script>
+    <script src="js/cart_template.js"></script>
+    <script src="js/carts.js"></script>
+    <style>
+        #daohang{
+            padding: 15px;
+        }
+        #sousuo{
+
+        }
+        #projectSort1{
+            padding: 18px;
+        }
+
+        #IFC1{
+            padding: 18px;
+        }
+        #location1{
+            padding: 18px;
+        }
+        #location3{
+
+            padding: 8px;
+        }
+        .left_2{
+            float: left;
+            width: 170px;
+            height: 100px;
+            padding: 30px;
+            background-color: green;
+            text-align: center;
+        }
+        .left_12{
+            float: left;
+            width: 800px;
+            height: 100px;
+            padding-top: 30px;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-bottom: 30px;
+            background-color: #89a415;
+            color: #dddddd;
+            margin-top: 10px;
+        }
+        .green{
+            padding: 5px;
+        }
+
+    </style>
+    <script>
+
+       let COLLECT_URL='http://localhost:8080/find/collect?isDelete=0';
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            $.get(COLLECT_URL,function (results) {
+                if (results.status===200){
+                    var $container = $(".container");
+                    for (const argument of results.data.projectMappers) {
+                        $container.append(
+                            $("<div>").attr("class", "left_12")
+                                .append(
+
+                                $("<div>").append(
+                                    $("<a>").attr("href", "#").append(
+                                        $("<h1>").text(argument.proName)
+                                    )
+                                )
+                                    .append(
+                                        $("<span>").text('发布公司：').append(
+                                            $("<em>").attr("class", "green").text(argument.proCom)
+                                        )
+                                    )
+                                    .append(
+                                        $("<span>").text('发布日期：').append(
+                                            $("<em>").attr("class", "green").text(argument.createTime)
+                                        )
+                                    )
+                            )
+                        )
+                    }
+                }
+            },'json')
+        })
+
+
+    </script>
+</head>
+<body style="background-image:url('https://www.sxsoft.com//images/company/banner.png');background-repeat:no-repeat;">
+<nav class="navbar navbar-default clearfix" role="navigation" id="s1" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #dddddd"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+<div class="container">
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/carts.css" rel="stylesheet">
+    <link href="css/reset.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/base_url.js"></script>
+    <script src="js/cart_template.js"></script>
+    <script src="js/carts.js"></script>
+    <style>
+        #daohang{
+            padding: 15px;
+        }
+        #projectSort1{
+            padding: 18px;
+        }
+
+        #IFC1{
+            padding: 18px;
+        }
+        #location1{
+            padding: 18px;
+        }
+        #location3{
+
+            padding: 8px;
+        }
+        .left_2{
+            float: left;
+            width: 170px;
+            height: 100px;
+            padding: 30px;
+            background-color: #1b6d85;
+            text-align: center;
+        }
+        .left_8{
+            float: left;
+            width: 800px;
+            height: 100px;
+            padding-top: 30px;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-bottom: 30px;
+            background-color: #b3d7ff;
+            color:orange;
+        }
+        #mg {
+            width: 1300px
+
+        }
+
+    </style>
+    <script>
+
+        let NAVIGATION_URL = 'http://localhost:8080/find/nav';
+        let CATEGORY_URL = 'http://localhost:8080/find/cate';
+        let SUBMENU2_URL = 'http://localhost:8080/find/sub2';
+        let SUBMENU3_URL = 'http://localhost:8080/find/sub3';
+        let PROJECT_URL1 ='http://localhost:8080/find/des';
+        let UPDATE_URL='http://localhost:8080/find/update';
+        let ADD_URL='http://localhost:8080/find/add'
+        let USER_URL= 'http://localhost:8080/find/user?uid=' ;
+        let PROJECT_URL ='http://localhost:8080/find/pros1';
+        let cateIds ;
+        let sub2Ids ;
+        let sub3Id3 ;
+        let uid=sessionStorage.getItem("uid")
+        // $(function () {
+        //     $.get(NAVIGATION_URL,function (results) {
+        //         if (results.status===200){
+        //
+        //             var $daohang = $("#daohang");
+        //             for (let navigation of results.data.navigations) {
+        //                 $daohang.append(
+        //                     $("<li>").append(
+        //                        $ ("<a>").attr("href","http://localhost:8080/").text(navigation.navName)
+        //                     )
+        //                 )
+        //             }
+        //         }
+        //     },'json')
+        // })
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            $.get(CATEGORY_URL,function (results1) {
+                if (results1.status===200) {
+                    let $projectSort2 = $("#projectSort2");
+                    for (const categorylist1 of results1.data.categorylist) {
+                        $projectSort2.append(
+                            $("<li>").append(
+                                $("<a>").attr("href","#").text(categorylist1.cateName)
+                            ).click(function () {
+                                cateIds = categorylist1.cateId;
+                            })
+                        )
+                    }
+                }
+            },'JSON')
+        })
+
+        $(function () {
+            $.get(SUBMENU2_URL,function (results2) {
+                if (results2.status===200) {
+                    let $IFC2 = $("#IFC2");
+                    for (const subMenu2s1 of results2.data.subMenu2s) {
+                        $IFC2.append(
+                            $("<li>").append(
+                                $("<a>").text(subMenu2s1.menu2Name)
+                            ).click(function () {
+                                sub2Ids=subMenu2s1.menu2Id;
+                            })
+                        )
+                    }
+                }
+            },'JSON')
+        })
+
+        $(function () {
+            $.get(SUBMENU3_URL,function (results3) {
+                if (results3.status===200) {
+                    let $location2 = $("#location2");
+
+                    for ( const subMenu3s1 of results3.data.subMenu3s) {
+                        $location2.append(
+                            $("<li>").append(
+                                $("<a>").attr("href", "#").text(subMenu3s1.menu3Name)
+                            ).click(function () {
+                                sub3Id3=subMenu3s1.menu3Id;
+                                location.href='index.html?cateId='+cateIds+'&menu2Id='+sub2Ids+'&menu3Id='+sub3Id3;
+                            })
+                        )
+                    }
+                }
+            },'JSON')
+        })
+
+        // $(function () {
+        //     PROJECT_URL1+=location.search;
+        //
+        //     $.get(PROJECT_URL1,function (results) {
+        //         if (results.status===200) {
+        //             var $container = $(".container");
+        //             for (const categorylist1 of results.data.categorylist) {
+        //                 for (const cate of categorylist1.projectList) {
+        //                     for (const collection1List1 of cate.collection1List) {
+        //                         if (collection1List1.isDelete===0){
+        //                             $container
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_2")
+        //                                         .append(
+        //                                             $("<div>").attr("class", "row").append(
+        //                                                 $("<a>").append(
+        //                                                     $("<h1>").text(categorylist1.cateName)
+        //                                                 )
+        //                                             )
+        //                                                 .append(
+        //                                                     $("<div>").attr("class", "row").append(
+        //                                                         $("<span>").css("style", "color:#999999").text('竞标中')
+        //                                                     )
+        //                                                 )
+        //                                         )
+        //                                 )
+        //
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_8").append(
+        //                                         $("<div>").append(
+        //                                             $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+        //                                                 $("<h1>").text(cate.proName)
+        //                                             )
+        //                                         )
+        //                                             .append(
+        //                                                 $("<span>").text('发布公司：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.proCom)
+        //                                                 )
+        //                                             )
+        //                                             .append(
+        //                                                 $("<span>").text('发布日期：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.createTime)
+        //                                                 )
+        //                                             )
+        //                                     )
+        //                                 )
+        //                                 .append(
+        //
+        //                                     $("<div>").attr("class", "left_2").append(
+        //                                         $("<div>").append(
+        //                                             $("<button type='button' class='btn btn-warning'>").text('已收藏')
+        //                                                 .click(function () {
+        //                                                     $.get(UPDATE_URL+"?"+"cid="+collection1List1.cid+"&isDelete="+collection1List1.isDelete,function(results) {
+        //                                                         if (results.status === 200) {
+        //                                                             $(this).text("未收藏");
+        //
+        //                                                         }
+        //                                                         history.go(0)
+        //                                                     })
+        //                                                 })
+        //                                         )
+        //                                     )
+        //                                 )
+        //                         }else if (collection1List1.isDelete===1){
+        //                             $container
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_2")
+        //                                         .append(
+        //                                             $("<div>").attr("class", "row").append(
+        //                                                 $("<a>").append(
+        //                                                     $("<h1>").text(categorylist1.cateName)
+        //                                                 )
+        //                                             )
+        //                                                 .append(
+        //                                                     $("<div>").attr("class", "row").append(
+        //                                                         $("<span>").css("style", "color:#999999").text('竞标中')
+        //                                                     )
+        //                                                 )
+        //                                         )
+        //                                 )
+        //
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_8").append(
+        //                                         $("<div>").append(
+        //                                             $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+        //                                                 $("<h1>").text(cate.proName)
+        //                                             )
+        //                                         )
+        //                                             .append(
+        //                                                 $("<span>").text('发布公司：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.proCom)
+        //                                                 )
+        //                                             )
+        //                                             .append(
+        //                                                 $("<span>").text('发布日期：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.createTime)
+        //                                                 )
+        //                                             )
+        //                                     )
+        //                                 )
+        //                                 .append(
+        //
+        //                                     $("<div>").attr("class", "left_2").append(
+        //                                         $("<div>").append(
+        //                                             $("<button type='button' class='btn btn-warning'>").text('未收藏')
+        //                                                 .click(function () {
+        //                                                     $.get(UPDATE_URL+"?"+"cid="+collection1List1.cid+"&isDelete="+collection1List1.isDelete,function(results) {
+        //                                                         if (results.status === 200) {
+        //                                                             $(this).text("已收藏");
+        //
+        //                                                         }
+        //                                                         history.go(0)
+        //                                                     })
+        //                                                 })
+        //                                         )
+        //                                     )
+        //                                 )
+        //
+        //                         } else {
+        //
+        //                             $container
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_2")
+        //                                         .append(
+        //                                             $("<div>").attr("class", "row").append(
+        //                                                 $("<a>").append(
+        //                                                     $("<h1>").text(categorylist1.cateName)
+        //                                                 )
+        //                                             )
+        //                                                 .append(
+        //                                                     $("<div>").attr("class", "row").append(
+        //                                                         $("<span>").css("style", "color:#999999").text('竞标中')
+        //                                                     )
+        //                                                 )
+        //                                         )
+        //                                 )
+        //
+        //                                 .append(
+        //                                     $("<div>").attr("class", "left_8").append(
+        //                                         $("<div>").append(
+        //                                             $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+        //                                                 $("<h1>").text(cate.proName)
+        //                                             )
+        //                                         )
+        //                                             .append(
+        //                                                 $("<span>").text('发布公司：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.proCom)
+        //                                                 )
+        //                                             )
+        //                                             .append(
+        //                                                 $("<span>").text('发布日期：').append(
+        //                                                     $("<em>").attr("class", "green").text(cate.createTime)
+        //                                                 )
+        //                                             )
+        //                                     )
+        //                                 )
+        //                                 .append(
+        //
+        //                                     $("<div>").attr("class", "left_2").append(
+        //                                         $("<div>").append(
+        //                                             $("<button type='button' class='btn btn-warning'>").text('未收藏')
+        //                                                 .click(function () {
+        //                                                     $.get(ADD_URL+"?proid="+cate.proid+"&uid="+uid+"&isDelete=0",function(results) {
+        //                                                         if (results.status===200) {
+        //                                                             $(this).text("已收藏");
+        //
+        //                                                         }
+        //                                                         history.go(0)
+        //                                                     })
+        //                                                 })
+        //                                         )
+        //                                     )
+        //                                 )
+        //                         }
+        //
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     },'JSON')
+        // })
+        $(function () {
+            $("#search_btn").click(function () {
+                if ($("#exampleInputName2").val()!==null && $("#exampleInputName2").val()!=="" && $("#exampleInputName2").val()!==undefined){
+                    location.href = "search.html?keyword=" + $("#exampleInputName2").val();
+                } else {
+                    alert("搜索框不能为空！")
+                }
+                // alert(sessionStorage.getItem("uid"));
+                return false;
+            })
+        });
+
+
+        $(function () {
+
+            $.get(PROJECT_URL,function (results) {
+                // alert(sessionStorage.getItem("uid"));
+
+                if (results.status===200) {
+                    var $container = $(".container");
+                    for (const categorylist1 of results.data.categorylist) {
+                        for (const cate of categorylist1.projectList) {
+                            for (const collection1List1 of cate.collection1List) {
+                                if (collection1List1.isDelete === 0) {
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-warning'>").text(' - 取消收藏')
+                                                        .click(function () {
+                                                            $.get(UPDATE_URL + "?" + "cid=" + collection1List1.cid + "&isDelete=" + collection1List1.isDelete, function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-warning").addClass("btn-success").text(" + 添加收藏");
+                                                                    history.go(0)
+                                                                }
+
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+                                } else if (collection1List1.isDelete === 1) {
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-success'>").text(' + 添加收藏')
+                                                        .click(function () {
+                                                            $.get(UPDATE_URL + "?" + "cid=" + collection1List1.cid + "&isDelete=" + collection1List1.isDelete, function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-success").addClass("btn-warning").text(" - 取消收藏");
+                                                                    history.go(0)
+                                                                }
+
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+
+                                } else {
+
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-success'>").text(' + 添加收藏')
+                                                        .click(function () {
+                                                            $.get(ADD_URL + "?proid=" + cate.proid + "&uid=" + uid + "&isDelete=0", function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-success").addClass("btn-warning").text("- 取消收藏");
+                                                                    history.go(0)
+                                                                }
+
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+                                }
+                            }
+                        }
+                    }
+                }
+            },"json")
+        })
+
+
+        $(function () {
+            PROJECT_URL1+=location.search;
+            $.get(PROJECT_URL1,function (results) {
+
+                if (results.status===200) {
+                    var $container = $(".container");
+                    for (const categorylist1 of results.data.categorylist) {
+                        for (const cate of categorylist1.projectList) {
+                            for (const collection1List1 of cate.collection1List) {
+                                if (collection1List1.isDelete === 0) {
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-warning'>").text(' - 取消收藏')
+                                                        .click(function () {
+                                                            $.get(UPDATE_URL + "?" + "cid=" + collection1List1.cid + "&isDelete=" + collection1List1.isDelete, function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-warning").addClass("btn-success").text(" + 添加收藏");
+                                                                    history.go(0)
+                                                                }
+
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+                                } else if (collection1List1.isDelete === 1) {
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-success'>").text(' + 添加收藏')
+                                                        .click(function () {
+                                                            $.get(UPDATE_URL + "?" + "cid=" + collection1List1.cid + "&isDelete=" + collection1List1.isDelete, function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-success").addClass("btn-warning").text(" - 取消收藏");
+                                                                    history.go(0)
+                                                                }
+
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+
+                                } else {
+
+                                    $container
+                                        .append(
+                                            $("<div>").attr("class", "left_2")
+                                                .append(
+                                                    $("<div>").attr("class", "row").append(
+                                                        $("<a>").append(
+                                                            $("<h1>").text(categorylist1.cateName)
+                                                        )
+                                                    )
+                                                        .append(
+                                                            $("<div>").attr("class", "row").append(
+                                                                $("<span>").css("style", "color:#999999").text('竞标中')
+                                                            )
+                                                        )
+                                                )
+                                        )
+
+                                        .append(
+                                            $("<div>").attr("class", "left_8").append(
+                                                $("<div>").append(
+                                                    $("<a>").attr("href", "project_detail.html?proId=" + cate.proid).append(
+                                                        $("<h1>").text(cate.proName)
+                                                    )
+                                                )
+                                                    .append(
+                                                        $("<span>").text('发布公司：').append(
+                                                            $("<em>").attr("class", "green").text(cate.proCom)
+                                                        )
+                                                    )
+                                                    .append(
+                                                        $("<span>").text('发布日期：').append(
+                                                            $("<em>").attr("class", "green").text(cate.createTime)
+                                                        )
+                                                    )
+                                            )
+                                        )
+                                        .append(
+                                            $("<div>").attr("class", "left_2").append(
+                                                $("<div>").append(
+                                                    $("<button type='button' class='btn btn-success'>").text(' + 添加收藏')
+                                                        .click(function () {
+                                                            $.get(ADD_URL + "?proid=" + cate.proid + "&uid=" + uid + "&isDelete=0", function (results) {
+                                                                if (results.status === 200) {
+                                                                    $(this).removeClass("btn-success").addClass("btn-warning").text(" - 取消收藏");
+                                                                    history.go(0)
+                                                                }
+                                                            })
+                                                        })
+                                                )
+                                            )
+                                        )
+                                }
+                            }
+                        }
+                    }
+                }
+            },"json")
+        })
+    </script>
+</head>
+<body style="background-image:url('https://www.sxsoft.com//images/company/banner.png');background-repeat: no-repeat;">
+<nav class="navbar navbar-default clearfix" role="navigation" id="s1" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #dddddd"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index3.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+        <li><a href="collected.html">收藏</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li><div class="container-fluid">
+            <div class="search row">
+                <form id="search_form" action="#" class="navbar-form col-lg-6">
+                    <div class="form-group">
+                        <label for="exampleInputName2" style="font-size: 15px;font-weight: 200">搜项目：</label>
+                        <input type="text" id="exampleInputName2" class="form-control" placeholder="项目名/要求">
+                    </div>
+                    <button id="search_btn" type="button" class="btn btn-default">搜索</button>
+                </form>
+            </div>
+        </div></li>
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+
+<div>
+    <img src="https://www.sxsoft.com/images/home/nei_banner.png?0512" style="width: 100%;"/>
+</div>
+<div class="clearfix" style="background-color:green;height: 30px;line-height: 30px;">
+    <div class="pull-left" style="color:white;">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;找项目——按条件筛选</div>
+    <div class="pull-right" ><a href="index3.html" style="color:white;">重置条件</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</div>
+</div>
+
+<div class="col-lg-offset-1">
+    <div class="row">
+        <div class="navbar-header" id="projectSort1">
+            <p>项目分类:</p>
+        </div>
+        <ul class="nav navbar-nav" id="projectSort2">
+
+        </ul>
+    </div>
+
+
+
+    <div class="row">
+        <div class="navbar-header" id="IFC1">
+            <p>项目预算:</p>
+        </div>
+        <ul class="nav navbar-nav" id="IFC2">
+
+
+        </ul>
+    </div>
+
+
+
+    <div class="row">
+        <div class="navbar-header" id="location1">
+            <p>所在地区:</p>
+        </div>
+        <ul class="nav navbar-nav" id="location2">
+
+        </ul>
+    </div>
+</div>
+
+<form class="container">
+
+</form>
+<div id="mg"  style="margin-top: 20px;width: 100%;height: 300px;">
+    <div class="col-lg-4">
+        <img src="img/Snipaste_2019-08-29_19-17-47.png" style="height: 300px;">
+    </div>
+    <div class="col-lg-8">
+        <img src="img/Snipaste_2019-08-29_14-45-23.png" style="height: 300px;width: 100%">
+    </div>
+</div>
+
+
+</body>
+</html>

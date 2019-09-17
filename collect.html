@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <script>
+        let USER_URL = "http://localhost:8080/collect/user?uid="+sessionStorage.getItem("uid");
+        let COLLECT2_URL = "http://localhost:8080/collect/programmers?uid="+sessionStorage.getItem("uid");
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            $.get(USER_URL,function (results) {
+                if (results.status===200) {
+                    let $left = $("#left");
+                    $left.attr("style","font-size:20px;padding-top:100px").append(
+                        $("<p>").text("用户id："+results.data.uid)
+                    ).append(
+                        $("<p>").text("用户名："+results.data.username)
+                    ).append(
+                        $("<p>").text("用户电话："+results.data.utel)
+                    ).append(
+                        $("<p>").text("用户邮箱："+results.data.email)
+                    )
+                }
+            },"json");
+            $.get(COLLECT2_URL,function (results) {
+                if (results.status===200) {
+                    for (const programmer of results.data) {
+                        let $div = $("<div>");
+                        $div.addClass("clearfix").append(
+                            $("<div>").addClass("col-lg-2 pull-left").append(
+                                $("<a>").attr("href", "programmer_detail.html?pid=" + programmer.pid).append(
+                                    $("<div>").attr("style", "margin-top:10px").append(
+                                        $("<img>").attr("src", programmer.pimage).addClass("img-rounded").attr("style", "width:120px;height:120px")
+                                    ).append(
+                                        $("<p>").text(programmer.pname).attr("style", "color:#337ab7;text-align:center;margin-top:5px")
+                                    )
+                                )
+                            )
+                        ).append(
+                            $("<div>").addClass("col-lg-8 pull-left").attr("style", "text-align:center").append(
+                                $("<div>").attr("style", "margin-top:35px").append(
+                                    $("<div>").addClass("col-lg-3").append(
+                                        $("<span>").html("<p style='color:#ff8706'>" + programmer.finish + "</p>" + "承接项目数")
+                                    )
+                                ).append(
+                                    $("<div>").addClass("col-lg-3").append(
+                                        $("<span>").html("<p>" + programmer.moods + "</p>" + "人气")
+                                    )
+                                ).append(
+                                    $("<div>").addClass("col-lg-3").append(
+                                        $("<span>").html("<p>" + programmer.grade + "</p>" + "积分")
+                                    )
+                                ).append(
+                                    $("<div>").addClass("col-lg-3").append(
+                                        $("<span>").html("<p>" + programmer.income + "</p>" + "最近收入")
+                                    )
+                                )
+                            ).append(
+                                $("<p>").attr("style", "text-align:left;padding-top:70px").addClass("col-lg-offset-1").html("<span style='color:#999'>擅长领域    </span>" + programmer.adept)
+                            )
+                        ).append(
+                            $("<div>").addClass("col-lg-2").append(
+                                $("<button type='button' class='btn btn-warning'> - 取消收藏</button>").attr("style", "margin-top:50px").attr("id", programmer.pid)
+                                    .click(function () {
+                                        $.get("http://localhost:8080/programmer/deleteProgrammer?pid=" + programmer.pid + "&uid=" + sessionStorage.getItem("uid"), function (results) {
+                                            if (results.status === 200) {
+                                                alert("取消成功！");
+                                                history.go(0)
+                                            }else {
+                                                alert("取消失败!");
+                                                history.go(0)
+                                            }
+                                        }, "json");
+                                    })
+                            ).append(
+                                $("<p>").text(programmer.location)
+                            )
+                        ).mouseover(function () {
+                            $div.attr("style", "background-color:#7ACFFF")
+                        }).mouseleave(function () {
+                            $div.attr("style", "background-color:white")
+                        });
+                        $("#down").append($div)
+                    }
+                }
+            },"json")
+        })
+
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default clearfix" role="navigation" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #b9ddc7"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+    <div class="container" style="margin-top: 30px">
+        <div id="left" class="col-lg-3">
+
+        </div>
+        <div id="right" class="col-lg-9">
+<!--            <div id="up">-->
+<!--                <p style="font-size: 30px;text-align: center">收藏的项目</p>-->
+
+<!--            </div>-->
+<!--            <div style="height: 5px;background-color:green;"></div>-->
+            <div id="down">
+                <p style="font-size: 30px;text-align: center">收藏的接包人</p>
+                <div style="height: 5px;background-color:green;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

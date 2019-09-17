@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.js"></script>
+    <!--     轮播图-->
+    <script src="https://cdn.bootcss.com/Swiper/4.5.0/js/swiper.js"></script>
+    <!--      核心样式组件-->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.css" rel="stylesheet">-->
+    <!--    轮播图-->
+    <link href="https://cdn.bootcss.com/Swiper/4.5.0/css/swiper.css" rel="stylesheet">
+    <link href="css/reset.css" rel="stylesheet">
+    <link href="css/project_detail.css" rel="stylesheet">
+    <script>
+        let project_url = "http://localhost:8080/project"
+        project_url += location.search;
+        $(function () {
+            $("#login").text(sessionStorage.getItem("username"));
+            $.get(project_url,function (results) {
+                if(results.status===200){
+                    $("<span>").text(results.data.proName).appendTo($(".project_name"))
+                    $("<a>").attr("href",'#').text(results.data.proCom).appendTo($(".pro_com"))
+                    $("<span>").text('项目创建时间').appendTo($(".pro_com"))
+                    $("<span>").text(results.data.createTime).appendTo($(".pro_com"))
+                    $(".cat_name").text(results.data.category.cateName)
+                    $(".pro_cost").text(results.data.subMenu2.menu2Name)
+                    $(".spend_time").text(results.data.time)
+                    $(".area").text(results.data.subMenu3.menu3Name)
+                    $(".text_desc").text(results.data.proRequest)
+                }
+            },'json')
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default clearfix" role="navigation" style="background-color:#cecda3;">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: #b9ddc7"><img src="img/logo.png"/></div>
+    </div>
+    <ul class="nav navbar-nav" style="padding: 15px;">
+        <li><a href="index.html">找项目</a></li>
+        <li><a href="index2.html">接包达人</a></li>
+        <li><a href="project_reform.html">发项目</a></li>
+        <li><a href="collected.html">收藏</a></li>
+    </ul>
+    <ul  class="nav navbar-nav pull-right" style="padding: 15px">
+        <li><a href="login.html" id="login">登录</a> </li>
+        <li><a href="register.html">注册</a> </li>
+    </ul>
+</nav>
+    <div class="container">
+    <div class="contents col-lg-12" align="center" style="margin-top: 50px">
+        <div>
+            <strong><h1 class="project_name">
+            </h1></strong>
+        </div>
+        <div class="pro_com">
+            <span class="company">发包方</span>
+        </div>
+        <div class="pro_process">
+            <div class=col-sm-3>
+                <div class="single">
+                    <p class="cat_name">
+
+                    </p>
+                    <p class="cat">
+                        项目类型
+                    </p>
+                </div>
+            </div>
+            <div class=col-sm-3>
+                <div class="single">
+                <p class="pro_cost">
+
+                </p>
+                <p class="cat">
+                    项目预算
+                </p>
+                </div>
+            </div>
+            <div class=col-sm-3>
+                <div class="single">
+                <p class="spend_time">
+
+                </p>
+                <p class="cat">
+                    预计开发时间
+                </p>
+                </div>
+            </div>
+            <div class=col-sm-3>
+                <div class="single">
+                <p class="area">
+
+                </p>
+                <p class="cat">
+                    区域限制
+                </p>
+                </div>
+            </div>
+        </div>
+        <div class="pro_desc">
+            <div class="col-lg-12">
+                <p class="desc">
+                    项目内容描述
+                </p>
+
+                <div class="text">
+                    <p class="text_desc" style="text-align: left">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
